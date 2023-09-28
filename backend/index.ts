@@ -100,7 +100,7 @@ Bun.serve({
                             const key = new Bun.CryptoHasher("blake2b256");
                             let username = info.payload.username;
                             key.update(info.payload.password);
-                            let password = key.digest().toString();
+                            let password = key.digest()
                             let hostActive = getUUID(currentHosts, info.payload.username);
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
                             if (corPasswd?.password === password) {
@@ -190,6 +190,7 @@ Bun.serve({
                             let password = key.digest();
 
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
+                            console.log(corPasswd);
                             if (corPasswd?.password === password) {
                                 currentHosts.set(ws.data.uuid, { username: info.payload.username, ws: ws } as UserState);
                                 ws.send(JSON.stringify({
