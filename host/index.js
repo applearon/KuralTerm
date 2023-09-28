@@ -16,7 +16,6 @@ var pty = (0, node_pty_1.spawn)('/bin/bash', [], {
     env: process.env
 });
 pty.onData(function (data) {
-    console.log(data);
     var termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
     try {
         socket.send(JSON.stringify(termstuff));
