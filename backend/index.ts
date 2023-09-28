@@ -159,8 +159,8 @@ Bun.serve({
                     switch (info.action) {
                         case "init": {
                             let userExists = (await client.query('SELECT * FROM hosts WHERE username = $1', [info.payload.username])).rows[0];
-                            console.log(userExists);
-                            if (userExists) { // if the user exists
+                            console.log("userexists" + userExists);
+                            if (userExists !== undefined) { // if the user exists
                                 ws.send(JSON.stringify({
                                     action: "result",
                                     payload: {
