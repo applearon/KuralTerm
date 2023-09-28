@@ -103,7 +103,7 @@ Bun.serve({
                             let password = key.digest()
                             let hostActive = getUUID(currentHosts, info.payload.username);
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
-                            if (corPasswd?.password === password) {
+                            if (corPasswd?.password.toString() === password.toString()) {
                                 if (hostActive !== undefined) { // user has logged in
                                     currentClients.set(ws.data.uuid, { username: info.payload.username, ws: ws } as UserState);
                                     ws.send(JSON.stringify({
@@ -192,7 +192,7 @@ Bun.serve({
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
                             console.log(corPasswd);
                             console.log(password);
-                            if (corPasswd?.password === password) {
+                            if (corPasswd?.password.toString() === password.toString()) {
                                 currentHosts.set(ws.data.uuid, { username: info.payload.username, ws: ws } as UserState);
                                 ws.send(JSON.stringify({
                                     action: "result",
