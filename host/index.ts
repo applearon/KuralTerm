@@ -32,7 +32,7 @@ socket.addEventListener("message", (event) => {
     
     if (JSON.parse(data).action === "login") {
         console.log(JSON.parse(data))
-        pty.write('^C clear\n');
+        pty.write('\x03clear\n');
         
     } else if (JSON.parse(data).action === "data") {
       pty.write(JSON.parse(data).payload);
