@@ -1,7 +1,8 @@
 import { WebSocket } from 'ws';
-const socket = new WebSocket("ws://localhost:3000");
 import { spawn }  from 'node-pty';
 let login = {"action": "host", "payload": {"action": "login", "payload": {"username": "BSSCC", "password": process.env.HOSTPW}}}
+let url = 'localhost' // Change to bastion host IP
+const socket = new WebSocket(`ws://${url}:3000`);
 
 // Connection opened
 socket.addEventListener("open", (event) => {
@@ -32,7 +33,7 @@ socket.addEventListener("message", (event) => {
     
     if (JSON.parse(data).action === "login") {
         console.log(JSON.parse(data))
-        pty.write('\x03 clear\n');
+        pty.write('\x03 clear\n'); // initial clear so all terminals are equivalent
         
     } else if (JSON.parse(data).action === "data") {
       pty.write(JSON.parse(data).payload);
