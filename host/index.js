@@ -16,7 +16,7 @@ var pty = (0, node_pty_1.spawn)('/bin/bash', [], {
     env: process.env
 });
 pty.onData(function (data) {
-    process.stdout.write(data);
+    // process.stdout.write(data);
     console.log('output');
     var termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
     socket.send(JSON.stringify(termstuff));
@@ -24,7 +24,7 @@ pty.onData(function (data) {
 socket.addEventListener("message", function (event) {
     var data = event.data.toString();
     if (JSON.parse(data).action === "result") {
-        console.log(JSON.parse(data));
+        console.log(JSON.parse(data).payload);
     }
     if (JSON.parse(data).action === "login") {
         // ls.stdin.write('echo henlo\n')

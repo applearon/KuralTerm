@@ -15,7 +15,7 @@ let pty = spawn('/bin/bash', [], {
     env: process.env
 });
 pty.onData((data) => {
-    process.stdout.write(data);
+    // process.stdout.write(data);
     console.log('output')
     let termstuff = {"action": "host", "payload": {"action": "host", "payload": data}};
     socket.send(JSON.stringify(termstuff));  
@@ -24,7 +24,7 @@ pty.onData((data) => {
 socket.addEventListener("message", (event) => {
     let data: string = event.data.toString();
     if(JSON.parse(data).action === "result") {
-        console.log(JSON.parse(data));
+        console.log(JSON.parse(data).payload);
     }
     
     if (JSON.parse(data).action === "login") {
