@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ws_1 = require("ws");
-var socket = new ws_1.WebSocket("ws://localhost:3000");
 var node_pty_1 = require("node-pty");
 var login = { "action": "host", "payload": { "action": "login", "payload": { "username": "BSSCC", "password": process.env.HOSTPW } } };
+var url = 'localhost'; // Change to bastion host IP
+var socket = new ws_1.WebSocket("ws://".concat(url, ":3000"));
 // Connection opened
 socket.addEventListener("open", function (event) {
     socket.send(JSON.stringify(login));
@@ -32,7 +33,7 @@ socket.addEventListener("message", function (event) {
     }
     if (JSON.parse(data).action === "login") {
         console.log(JSON.parse(data));
-        pty.write('\x03 clear\n');
+        pty.write('\x03 clear\n'); // initial clear so all terminals are equivalent
     }
     else if (JSON.parse(data).action === "data") {
         pty.write(JSON.parse(data).payload);
