@@ -15,7 +15,6 @@ let pty = spawn('/bin/bash', [], {
     env: process.env
 });
 pty.onData((data) => {
-    // process.stdout.write(data);
     console.log('output')
     let termstuff = {"action": "host", "payload": {"action": "host", "payload": data}};
     socket.send(JSON.stringify(termstuff));  
