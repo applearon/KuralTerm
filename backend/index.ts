@@ -191,6 +191,7 @@ Bun.serve({
 
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
                             console.log(corPasswd);
+                            console.log(password);
                             if (corPasswd?.password === password) {
                                 currentHosts.set(ws.data.uuid, { username: info.payload.username, ws: ws } as UserState);
                                 ws.send(JSON.stringify({
