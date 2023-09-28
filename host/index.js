@@ -16,10 +16,15 @@ var pty = (0, node_pty_1.spawn)('/bin/bash', [], {
     env: process.env
 });
 pty.onData(function (data) {
-    // process.stdout.write(data);
     console.log('output');
     var termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
-    socket.send(JSON.stringify(termstuff));
+    try {
+        socket.send(JSON.stringify(termstuff));
+    }
+    catch (err) {
+        console.log(err);
+        console.log("Failed to send terminal data");
+    }
 });
 socket.addEventListener("message", function (event) {
     var data = event.data.toString();
@@ -27,16 +32,12 @@ socket.addEventListener("message", function (event) {
         console.log(JSON.parse(data).payload);
     }
     if (JSON.parse(data).action === "login") {
-        // ls.stdin.write('echo henlo\n')
         console.log(JSON.parse(data));
+        pty.write('^C clear\n');
     }
     else if (JSON.parse(data).action === "data") {
-        //   if (JSON.parse(data).payload === '\r') {
-        //     pty.write('\n');
-        //     console.log('owo')
-        //   } else {
         pty.write(JSON.parse(data).payload);
         console.log(JSON.parse(data).payload);
-    } //}
+    }
 });
 console.log('hello');

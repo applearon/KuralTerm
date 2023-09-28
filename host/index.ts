@@ -17,7 +17,12 @@ let pty = spawn('/bin/bash', [], {
 pty.onData((data) => {
     console.log('output')
     let termstuff = {"action": "host", "payload": {"action": "host", "payload": data}};
-    socket.send(JSON.stringify(termstuff));  
+    try {
+    socket.send(JSON.stringify(termstuff));
+    } catch(err) {
+      console.log(err);
+      console.log("Failed to send terminal data");
+    }
   });
 
 socket.addEventListener("message", (event) => {
@@ -27,17 +32,13 @@ socket.addEventListener("message", (event) => {
     }
     
     if (JSON.parse(data).action === "login") {
-        // ls.stdin.write('echo henlo\n')
         console.log(JSON.parse(data))
+        pty.write('^C clear\n');
         
     } else if (JSON.parse(data).action === "data") {
-    //   if (JSON.parse(data).payload === '\r') {
-    //     pty.write('\n');
-    //     console.log('owo')
-    //   } else {
       pty.write(JSON.parse(data).payload);
       console.log(JSON.parse(data).payload)
-    } //}
+    } 
 
   });
 console.log('hello')
