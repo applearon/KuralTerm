@@ -160,7 +160,7 @@ Bun.serve({
                         case "init": {
                             let userExists = (await client.query('SELECT * FROM hosts WHERE username = $1', [info.payload.username])).rows[0];
                             console.log("userexists" + userExists);
-                            if (userExists !== undefined) { // if the user exists
+                            if (userExists !== undefined) { // if the user existsc
                                 ws.send(JSON.stringify({
                                     action: "result",
                                     payload: {
@@ -171,7 +171,7 @@ Bun.serve({
                                 } as WSMessage))
                             } else { // user does not exist yet,
                                 key.update(info.payload.password)
-                                let passwd = key.digest().toString()
+                                let passwd = key.digest();
                                 await client.query('INSERT INTO hosts(username, password) VALUES($1, $2)', [info.payload.username, passwd])
                                 ws.send(JSON.stringify({
                                     action: "result",
@@ -187,7 +187,7 @@ Bun.serve({
                         case "login": {
                             let username = info.payload.username;
                             key.update(info.payload.password);
-                            let password = key.digest().toString();
+                            let password = key.digest();
 
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
                             if (corPasswd?.password === password) {
