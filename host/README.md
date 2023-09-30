@@ -6,7 +6,15 @@ The host connects to the main backend bastion server, and creates a pty, and sen
 ```
 npm install
 ```
-2. Run the host:
+2. Set environment variables in `.env`:
+```
+export USERNAME=myusername;
+export PASSWORD=mypassword;
+export URL=localhost;
+export PORT=3000;
+```
+
+3. Run the host:
 ```
 node dist/index.js
 ```
