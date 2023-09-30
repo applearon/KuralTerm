@@ -1,6 +1,15 @@
 import { Terminal } from 'xterm';
-let url = 'edu.applism.ca'; // Change for bastion host IP
-const socket = new WebSocket(`ws://${url}:3000`);
+require('dotenv').config();
+
+let url = process.env.URL; // Change for bastion host IP
+let port = process.env.PORT;
+if (port === undefined) {
+    port = 3000; // default port
+}
+if (url === undefined) {
+    url = 'localhost'; // default URL
+}
+const socket = new WebSocket(`ws://${url}:${port}`);
 var term = new Terminal({
     cols: 80,
     rows: 24,

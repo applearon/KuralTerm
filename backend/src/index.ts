@@ -2,6 +2,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ServerWebSocket } from 'bun';
 import { Client } from 'pg';
+require('dotenv').config();
+
 console.log("Starting \"Bastion\" server");
 const client = new Client();
 try {
@@ -48,6 +50,11 @@ interface UserState {
     ws: ServerWebSocket<WSServerData>,
 }
 
+let port = process.env.PORT;
+if (port === undefined) {
+    port = '3000'; // default value
+}
+
 const currentHosts = new Map<string, UserState>; // uuid: UserState
 const currentClients = new Map<string, UserState>; // uuid: UserState
 
@@ -88,7 +95,7 @@ Bun.serve({
         }
         return new Response('try a websocket');
     },
-    port: 3000,
+    port: port,
     websocket: {
         async message(ws: ServerWebSocket<WSServerData>, message) {
             let msg: WSMessage = JSON.parse(message.toString());
