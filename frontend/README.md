@@ -1,23 +1,24 @@
 # kurual-frontend
 
-To install dependencies:
+## Installation
+1. Install dependencies:
 
 ```bash
-bun install
+npm i
 ```
 
-Set the environment variables in `.env`:
-```
+2. Set the environment variables in `.env`:
+```bash
 export URL=localhost;
 export PORT=3000;
 ```
 
-To run:
-
+3. Build frontend packages with parcel
 ```bash
-bun run index.js
+npx parcel build src/index.html
 ```
 
-
-
-This project was created using `bun init` in bun v1.0.3. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+(for development testing)
+```bash
+npx parcel src/index.html
+```
