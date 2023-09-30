@@ -9,8 +9,8 @@ npm i
 
 2. Set the environment variables in `.env`:
 ```bash
-export URL=localhost;
-export PORT=3000;
+export URL=localhost
+export PORT=3000
 ```
 
 3. Build frontend packages with parcel
