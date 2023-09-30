@@ -1,7 +1,6 @@
 {
   "name": "kurual-frontend",
-  "module": "index.js",
-  "type": "module",
+  "source": "index.html",
   "devDependencies": {
     "buffer": "^6.0.3",
     "bun-types": "latest",
