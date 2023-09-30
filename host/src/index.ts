@@ -3,6 +3,7 @@ import { spawn } from 'node-pty';
 require('dotenv').config();
 let username = process.env.USERNAME;
 let password = process.env.PASSWORD;
+let shell = process.env.HOSTSHELL
 let url = process.env.URL;
 let port = process.env.PORT;
 if (url === undefined) {
@@ -10,6 +11,9 @@ if (url === undefined) {
 }
 if (port === undefined) {
   port = '3000'; // default value
+}
+if (shell === undefined) {
+  shell = '/bin/bash';
 }
 if (username === undefined || password === undefined) {
   console.log("Set the host username and password in your .env");
@@ -26,7 +30,7 @@ const socket = new WebSocket(`ws://${url}:${port}`);
 socket.addEventListener("open", (event) => {
   socket.send(JSON.stringify(login));
 });
-let pty = spawn('/bin/bash', [], {
+let pty = spawn(shell, [], {
   name: 'xterm-color',
   cols: 80,
   rows: 24,

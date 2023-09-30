@@ -18,6 +18,7 @@ export USERNAME=myusername;
 export PASSWORD=mypassword;
 export URL=localhost;
 export PORT=3000;
+export HOSTSHELL=/bin/bash
 ```
 
 3. Run the host:
