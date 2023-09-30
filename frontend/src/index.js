@@ -1,5 +1,5 @@
 import { Terminal } from 'xterm';
-let url = 'localhost'; // Change for bastion host IP
+let url = 'edu.applism.ca'; // Change for bastion host IP
 const socket = new WebSocket(`ws://${url}:3000`);
 var term = new Terminal({
     cols: 80,
