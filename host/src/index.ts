@@ -26,7 +26,7 @@ if (username === undefined || password === undefined) {
 let login = { "action": "host", "payload": { "action": "login", "payload": { "username": username, "password": password } } }
 
 const socket = new WebSocket(`wss://${url}:${port}`);
-
+process.env['KURALTERM'] = "1"; // let term know it's on kuralterms
 // Connection opened
 socket.addEventListener("open", (event) => {
   socket.send(JSON.stringify(login));
@@ -36,9 +36,8 @@ let pty = spawn(infshell, [], {
   cols: 80,
   rows: 24,
   cwd: process.env.HOME,
-  env: process.env
+  env: process.env,
 });
-
 pty.onData((data) => {
   let termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
   try {

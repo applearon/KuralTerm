@@ -25,3 +25,12 @@ export HOSTSHELL=/bin/bash
 ```bash
 node dist/index.js
 ```
+
+### Recommended Step:
+Since KuralTerm only spawns 1 terminal per host, exiting that terminal will permanently exit it until the host is restarted. So, preventing killing the terminal is ideal. A simple way to do this is add the following into your `~/.bashrc` (or equivalent):
+```bash
+if [[ $KURALTERM ]]; then
+readonly IGNOREEOF=1000
+enable -n exit
+fi
+```
