@@ -26,8 +26,7 @@ if (username === undefined || password === undefined) {
 let login = { "action": "host", "payload": { "action": "login", "payload": { "username": username, "password": password } } }
 
 const socket = new WebSocket(`wss://${url}:${port}`);
-process.env['KURALTERM'] = "1"; // let term know it's on kuralterms
-let myenvs = {"KURALTERM": 1};
+let myenvs = {"KURALTERM": "1"};
 let testenv = Object.assign({},
   process.env,
   myenvs,
