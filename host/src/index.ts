@@ -15,6 +15,7 @@ if (port === undefined) {
 if (shell === undefined) {
   shell = '/bin/bash';
 }
+let infshell = `while [ true ]; do ${shell}; done`
 if (username === undefined || password === undefined) {
   console.log("Set the host username and password in your .env");
   console.log("export USERNAME=myusername");
@@ -24,19 +25,20 @@ if (username === undefined || password === undefined) {
 }
 let login = { "action": "host", "payload": { "action": "login", "payload": { "username": username, "password": password } } }
 
-const socket = new WebSocket(`ws://${url}:${port}`);
+const socket = new WebSocket(`wss://${url}:${port}`);
 
 // Connection opened
 socket.addEventListener("open", (event) => {
   socket.send(JSON.stringify(login));
 });
-let pty = spawn(shell, [], {
+let pty = spawn(infshell, [], {
   name: 'xterm-color',
   cols: 80,
   rows: 24,
   cwd: process.env.HOME,
   env: process.env
 });
+
 pty.onData((data) => {
   let termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
   try {

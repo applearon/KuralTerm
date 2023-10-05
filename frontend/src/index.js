@@ -9,7 +9,7 @@ if (port === undefined) {
 if (url === undefined) {
     url = 'localhost'; // default URL
 }
-const socket = new WebSocket(`ws://${url}:${port}`);
+const socket = new WebSocket(`wss://${url}:${port}`);
 var term = new Terminal({
     cols: 80,
     rows: 24,
