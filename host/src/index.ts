@@ -15,7 +15,6 @@ if (port === undefined) {
 if (shell === undefined) {
   shell = '/bin/bash';
 }
-let infshell = `while [ true ]; do ${shell}; done`
 if (username === undefined || password === undefined) {
   console.log("Set the host username and password in your .env");
   console.log("export USERNAME=myusername");
@@ -35,7 +34,7 @@ let testenv = Object.assign({},
 socket.addEventListener("open", (event) => {
   socket.send(JSON.stringify(login));
 });
-let pty = spawn(infshell, [], {
+let pty = spawn(shell, [], {
   name: 'xterm-color',
   cols: 80,
   rows: 24,
