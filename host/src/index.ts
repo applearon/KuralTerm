@@ -27,6 +27,11 @@ let login = { "action": "host", "payload": { "action": "login", "payload": { "us
 
 const socket = new WebSocket(`wss://${url}:${port}`);
 process.env['KURALTERM'] = "1"; // let term know it's on kuralterms
+let myenvs = {"KURALTERM": 1};
+let testenv = Object.assign({},
+  process.env,
+  myenvs,
+  )
 // Connection opened
 socket.addEventListener("open", (event) => {
   socket.send(JSON.stringify(login));
@@ -36,7 +41,7 @@ let pty = spawn(infshell, [], {
   cols: 80,
   rows: 24,
   cwd: process.env.HOME,
-  env: process.env,
+  env: testenv,
 });
 pty.onData((data) => {
   let termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
