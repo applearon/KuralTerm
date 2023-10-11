@@ -3,9 +3,11 @@ import { spawn } from 'node-pty';
 require('dotenv').config();
 let username = process.env.USERNAME;
 let password = process.env.PASSWORD;
-let shell = process.env.HOSTSHELL
+let shell = process.env.HOSTSHELL;
 let url = process.env.URL;
 let port = process.env.PORT;
+let socket: WebSocket;
+let reconnectInterval = 500; // reconnect after 0.5 sec
 if (url === undefined) {
   url = 'localhost'; // default value
 }
@@ -23,8 +25,8 @@ if (username === undefined || password === undefined) {
   process.abort();
 }
 let login = { "action": "host", "payload": { "action": "login", "payload": { "username": username, "password": password } } }
-
-let socket = new WebSocket(`wss://${url}:${port}`);
+let connect = function(){
+socket = new WebSocket(`wss://${url}:${port}`);
 let myenvs = {"KURALTERM": "1"};
 let testenv = Object.assign({},
   process.env,
@@ -34,12 +36,12 @@ let testenv = Object.assign({},
 socket.addEventListener("open", (event) => {
   socket.send(JSON.stringify(login));
 });
-let pty = spawn(shell, [], {
+let pty = spawn(shell!, [], {
   name: 'xterm-color',
   cols: 80,
   rows: 24,
   cwd: process.env.HOME,
-  env: testenv,
+  env: { KURALTERM: '1'},
 });
 pty.onData((data) => {
   let termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
@@ -51,14 +53,8 @@ pty.onData((data) => {
   }
 });
 pty.onExit((data) => { // should restart term on exit
-  pty=spawn(shell!, [], {
-    name: 'xterm-color',
-    cols: 80,
-    rows: 24,
-    cwd: process.env.HOME,
-    env: testenv,
-  });
-  console.log("restarted terminal")
+  console.log("terminal died :(");
+  socket.close(); // Force to restart connection, slightly scuffed but should work
 })
 
 socket.addEventListener("message", (event) => {
@@ -78,7 +74,9 @@ socket.addEventListener("message", (event) => {
 
 });
 socket.addEventListener("close", (event) => {
-  socket = new WebSocket(`wss://${url}:${port}`); // restart connection hopefully
+  setTimeout(connect, reconnectInterval)
   console.log("restarted connection");
 })
-console.log('hello')
+}
+console.log('hello');
+connect();
