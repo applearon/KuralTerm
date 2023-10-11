@@ -41,7 +41,7 @@ let pty = spawn(shell!, [], {
   cols: 80,
   rows: 24,
   cwd: process.env.HOME,
-  env: { KURALTERM: '1'},
+  env: process.env,
 });
 pty.onData((data) => {
   let termstuff = { "action": "host", "payload": { "action": "host", "payload": data } };
