@@ -24,7 +24,7 @@ if (username === undefined || password === undefined) {
 }
 let login = { "action": "host", "payload": { "action": "login", "payload": { "username": username, "password": password } } }
 
-const socket = new WebSocket(`wss://${url}:${port}`);
+let socket = new WebSocket(`wss://${url}:${port}`);
 let myenvs = {"KURALTERM": "1"};
 let testenv = Object.assign({},
   process.env,
@@ -50,6 +50,16 @@ pty.onData((data) => {
     console.log("Failed to send terminal data");
   }
 });
+pty.onExit((data) => { // should restart term on exit
+  pty=spawn(shell!, [], {
+    name: 'xterm-color',
+    cols: 80,
+    rows: 24,
+    cwd: process.env.HOME,
+    env: testenv,
+  });
+  console.log("restarted terminal")
+})
 
 socket.addEventListener("message", (event) => {
   let data: string = event.data.toString();
@@ -67,4 +77,8 @@ socket.addEventListener("message", (event) => {
   }
 
 });
+socket.addEventListener("close", (event) => {
+  socket = new WebSocket(`wss://${url}:${port}`); // restart connection hopefully
+  console.log("restarted connection");
+})
 console.log('hello')
