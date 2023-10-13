@@ -3,13 +3,15 @@ require('dotenv').config();
 
 let url = process.env.URL; // Change for bastion host IP
 let port = process.env.PORT;
+let socket;
+let reconnectInterval = 500; // reset websocket connection after 0.5sec
 if (port === undefined) {
     port = 3000; // default port
 }
 if (url === undefined) {
     url = 'localhost'; // default URL
 }
-const socket = new WebSocket(`wss://${url}:${port}`);
+socket = new WebSocket(`wss://${url}:${port}`);
 var term = new Terminal({
     cols: 80,
     rows: 24,
@@ -17,6 +19,8 @@ var term = new Terminal({
 term.open(document.getElementById('terminal'));
 term.write('Hello gamers from \x1B[1;3;31mxterm.js\x1B[0m $ ');
 console.log("Hello via Bun!");
+
+let connect = function(){
 let ServerStatus = document.getElementById("serverStats");
 // {"action": "host", "payload": {"action": "login", "payload": {"username": "BSSCC", "password": Bun.env.HOSTPW}}}
 
@@ -52,7 +56,13 @@ socket.addEventListener("message", (event) => {
         // term.clear()
         term.write(JSON.parse(data).payload);
         // term.writeln();
-        console.log(JSON.parse(data).payload);
+        // console.log(JSON.parse(data).payload);
         // term.write('\n')
     }
 });
+socket.addEventListener("close", (event) => {
+    console.log("connection closed :(");
+    setTimeout(connect, reconnectInterval)
+})
+};
+connect();
