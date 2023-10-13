@@ -6,7 +6,7 @@ KuralTerm utilizes websocket connections between the `host` and `frontend`, both
 
 The `backend` can be run on any server with open ports.
 Run the `host` on the device that you want to access.
-The `frontend` can be run on a server, locally, or you can connect to the example frontend [here](https://term.applism.ca).
+The `frontend` can be run on a server, locally, or you can connect to the example frontend [here](https://kural.applism.ca).
 
 ## Installation
 
