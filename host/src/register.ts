@@ -6,8 +6,8 @@ let username = process.env.KUSERNAME;
 let password = process.env.KPASSWORD;
 if (username === undefined || password === undefined) {
   console.log("Set the host $USERNAME and $PASSWORD in your .env:");
-  console.log("export USERNAME=myusername");
-  console.log("export PASSWORD=mypassword");
+  console.log("export KUSERNAME=myusername");
+  console.log("export KPASSWORD=mypassword");
 };
 if (url === undefined) {
   url = 'localhost'; // default value
@@ -21,6 +21,7 @@ const socket = new WebSocket(`wss://${url}:${port}`);
 let init = {"action": "host", "payload": {"action": "init", "payload": {"username": username, "password": password}}}
 
 socket.addEventListener("open", (event) => {
+  console.log("opening socket on " + url + ":" + port);
     socket.send(JSON.stringify(init));
   });
   socket.addEventListener("message", (event) => {

@@ -19,8 +19,8 @@ if (shell === undefined) {
 }
 if (username === undefined || password === undefined) {
   console.log("Set the host username and password in your .env");
-  console.log("export USERNAME=myusername");
-  console.log("export PASSWORD=mypassword");
+  console.log("export KUSERNAME=myusername");
+  console.log("export KPASSWORD=mypassword");
   console.log("if you haven't done so already, register an account using register.js");
   process.abort();
 }
