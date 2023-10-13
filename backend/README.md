@@ -11,12 +11,14 @@ bun install
 ```postgres
 CREATE TABLE hosts(username text, password bytea)
 ```
-create a `.env` file for Postgres login credentials:
+create a `.env` file for Postgres login credentials and Backend Port:
 ```bash
 export PGUSER=username
 export PGPASSWORD=password
 export PGDATABASE=databasename
 export PGPORT=5432
+
+export KPORT=3000
 ```
 
 To run:

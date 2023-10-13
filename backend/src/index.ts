@@ -50,7 +50,7 @@ interface UserState {
     ws: ServerWebSocket<WSServerData>,
 }
 
-let port = process.env.PORT;
+let port = process.env.KPORT;
 if (port === undefined) {
     port = '3000'; // default value
 }

@@ -14,11 +14,11 @@ npx tsc src/index.ts --outDir ./dist
 
 2. Set environment variables in `.env`:
 ```bash
-export USERNAME=myusername
-export PASSWORD=mypassword
-export URL=localhost
-export PORT=3000
-export HOSTSHELL=/bin/bash
+export KUSERNAME=myusername
+export KPASSWORD=mypassword
+export KURL=localhost
+export KPORT=3000
+export KHOSTSHELL=/bin/bash
 ```
 
 3. Run the host:

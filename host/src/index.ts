@@ -1,11 +1,11 @@
 import { WebSocket } from 'ws';
 import { spawn } from 'node-pty';
 require('dotenv').config();
-let username = process.env.USERNAME;
-let password = process.env.PASSWORD;
-let shell = process.env.HOSTSHELL;
-let url = process.env.URL;
-let port = process.env.PORT;
+let username = process.env.KUSERNAME;
+let password = process.env.KPASSWORD;
+let shell = process.env.KSHELL;
+let url = process.env.KURL;
+let port = process.env.KPORT;
 let socket: WebSocket;
 let reconnectInterval = 500; // reconnect after 0.5 sec
 if (url === undefined) {
