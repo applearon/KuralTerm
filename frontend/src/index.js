@@ -32,6 +32,7 @@ function loginAttempt(login) {
     let res = { "action": "client", "payload": { "action": "login", "payload": { "username": username, "password": password } } }
     socket.send(JSON.stringify(res));
     login.preventDefault();
+    fitAddon.fit();
 }
 term.onBell(undefined => {
     console.log('bell')
@@ -44,12 +45,12 @@ term.onData(data => {
     let input = { "action": "client", "payload": { "action": "data", "payload": data } }
     socket.send(JSON.stringify(input))
     // term.write(data);
-    fitAddon.fit();
-    console.log("resize!");
 });
 term.onResize(data => {
     let input = {"action": "client", "payload": {"action": "resize", "payload": {"x": data.cols, "y": data.rows}}};
     socket.send(JSON.stringify(input));
+    console.log("resize!");
+
 })
 const form = document.getElementById("login");
 form.addEventListener("submit", loginAttempt);
