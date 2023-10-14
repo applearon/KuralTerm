@@ -69,6 +69,7 @@ pty.onExit((data) => { // should restart term on exit
 
 socket.addEventListener("message", (event) => {
   let data: WSMessage = JSON.parse(event.data.toString());
+  console.log(event.data);
   switch (data.action) {
     case "result": {
       console.log(data.payload);
