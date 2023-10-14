@@ -16,7 +16,6 @@ let term = new Terminal();
 const fitAddon = new FitAddon();
 term.loadAddon(fitAddon);
 term.open(document.getElementById('terminal'));
-fitAddon.fit();
 console.log(term.cols, term.rows);
 term.write('Hello gamers from \x1B[1;3;31mxterm.js\x1B[0m $ ');
 console.log("Hello via Bun!");
@@ -24,9 +23,9 @@ console.log("Hello via Bun!");
 let connect = function(){
 let ServerStatus = document.getElementById("serverStats");
 // {"action": "host", "payload": {"action": "login", "payload": {"username": "BSSCC", "password": Bun.env.HOSTPW}}}
-
+socket = new WebSocket(`wss://${url}:${port}`);
 function loginAttempt(login) {
-    socket = new WebSocket(`wss://${url}:${port}`);
+    
     console.log("hi")
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;

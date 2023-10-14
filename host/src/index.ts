@@ -83,6 +83,7 @@ socket.addEventListener("message", (event) => {
     }; break
     case "resize": {
       pty.resize(data.payload.y, data.payload.x);
+      console.log("resize!");
     }; break
   }
 
