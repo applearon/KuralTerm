@@ -163,7 +163,6 @@ Bun.serve({
                         case "resize": {
                             if (currentClients.get(ws.data.uuid)) { // user is logged in?
                             // send resize to other terms, and host
-                            console.log("resize!");
                             hostBroadcast(info, currentClients.get(ws.data.uuid)?.username!);
                             let hostActive = hostUUIDs.get(currentClients.get(ws.data.uuid)?.username!);
                             currentHosts.get(hostActive!)?.ws.send(JSON.stringify(info));

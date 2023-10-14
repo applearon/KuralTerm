@@ -69,7 +69,6 @@ pty.onExit((data) => { // should restart term on exit
 
 socket.addEventListener("message", (event) => {
   let data: WSMessage = JSON.parse(event.data.toString());
-  console.log(event.data);
   switch (data.action) {
     case "result": {
       console.log(data.payload);
@@ -83,8 +82,7 @@ socket.addEventListener("message", (event) => {
 
     }; break
     case "resize": {
-      pty.resize(data.payload.y, data.payload.x);
-      console.log("resize!");
+      pty.resize(data.payload.x, data.payload.y);
     }; break
   }
 
