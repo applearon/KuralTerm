@@ -153,11 +153,19 @@ Bun.serve({
                             // console.log(corPasswd)
                         }; break
                         case "data": {
-                            if (currentClients.get(ws.data.uuid)) { // user is logged in
+                            if (currentClients.get(ws.data.uuid)) { // user is logged in?
                                 // console.log(info);
                                 // let hostActive = getUUID(currentHosts, currentClients.get(ws.data.uuid)?.username!);
                                 let hostActive = hostUUIDs.get(currentClients.get(ws.data.uuid)?.username!);
                                 currentHosts.get(hostActive!)?.ws.send(JSON.stringify(info));
+                            }
+                        }; break
+                        case "resize": {
+                            if (currentClients.get(ws.data.uuid)) { // user is logged in?
+                            // send resize to other terms, and host
+                            hostBroadcast(info, currentClients.get(ws.data.uuid)?.username!);
+                            let hostActive = hostUUIDs.get(currentClients.get(ws.data.uuid)?.username!);
+                            currentHosts.get(hostActive!)?.ws.send(JSON.stringify(info));
                             }
                         }
                     }

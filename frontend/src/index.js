@@ -1,4 +1,5 @@
 import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
 require('dotenv').config();
 
 let url = process.env.URL; // Change for bastion host IP
@@ -11,12 +12,12 @@ if (port === undefined) {
 if (url === undefined) {
     url = 'localhost'; // default URL
 }
-socket = new WebSocket(`wss://${url}:${port}`);
-var term = new Terminal({
-    cols: 80,
-    rows: 24,
-});
+let term = new Terminal();
+const fitAddon = new FitAddon();
+term.loadAddon(fitAddon);
 term.open(document.getElementById('terminal'));
+fitAddon.fit();
+console.log(term.cols, term.rows);
 term.write('Hello gamers from \x1B[1;3;31mxterm.js\x1B[0m $ ');
 console.log("Hello via Bun!");
 
@@ -25,6 +26,7 @@ let ServerStatus = document.getElementById("serverStats");
 // {"action": "host", "payload": {"action": "login", "payload": {"username": "BSSCC", "password": Bun.env.HOSTPW}}}
 
 function loginAttempt(login) {
+    socket = new WebSocket(`wss://${url}:${port}`);
     console.log("hi")
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
@@ -43,6 +45,11 @@ term.onData(data => {
     let input = { "action": "client", "payload": { "action": "data", "payload": data } }
     socket.send(JSON.stringify(input))
     // term.write(data);
+    fitAddon.fit();
+});
+term.onResize(data => {
+    let input = {"action": "client", "payload": {"action": "resize", "payload": {"x": data.cols, "y": data.rows}}};
+    socket.send(JSON.stringify(input));
 })
 const form = document.getElementById("login");
 form.addEventListener("submit", loginAttempt);

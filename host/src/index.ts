@@ -1,6 +1,16 @@
 import { WebSocket } from 'ws';
 import { spawn } from 'node-pty';
 require('dotenv').config();
+
+interface WSMessage { // all Websocket messages use the interface WSMessage
+  action: string, // "client"/"host" for incoming
+  payload: string & WSResize,
+}
+interface WSResize {
+  x: number,
+  y: number,
+}
+
 let username = process.env.KUSERNAME;
 let password = process.env.KPASSWORD;
 let shell = process.env.KSHELL;
@@ -58,18 +68,22 @@ pty.onExit((data) => { // should restart term on exit
 })
 
 socket.addEventListener("message", (event) => {
-  let data: string = event.data.toString();
-  if (JSON.parse(data).action === "result") {
-    console.log(JSON.parse(data).payload);
-  }
+  let data: WSMessage = JSON.parse(event.data.toString());
+  switch (data.action) {
+    case "result": {
+      console.log(data.payload);
+    }; break
+    case "login": {
+      console.log(data.payload);
+      pty.write('\x03 clear\n');
+    }; break
+    case "data": {
+      pty.write(data.payload);
 
-  if (JSON.parse(data).action === "login") {
-    console.log(JSON.parse(data))
-    pty.write('\x03 clear\n'); // initial clear so all terminals are equivalent
-
-  } else if (JSON.parse(data).action === "data") {
-    pty.write(JSON.parse(data).payload);
-    console.log(JSON.parse(data).payload)
+    }; break
+    case "resize": {
+      pty.resize(data.payload.y, data.payload.x);
+    }; break
   }
 
 });

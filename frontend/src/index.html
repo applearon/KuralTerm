@@ -4,12 +4,17 @@
 <head>
     <title>Kurual Terminal UI</title>
     <link rel="stylesheet" href="../node_modules/xterm/css/xterm.css" />
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Kurual Terminal</h1>
-    <div id="terminal"></div>
-    <script type="module" src="index.js"></script>
+    <div id="terminal" ></div>
     <form id="login">
         <label for="username">Username: </label>
         <input type="text" id="username" name="username">
@@ -18,4 +23,5 @@
         <button type="submit">Submit</button>
     </form>
     <div id="serverStats"></div>
+    <script type="module" src="index.js"></script>
 </body </html>
