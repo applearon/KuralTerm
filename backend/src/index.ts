@@ -56,6 +56,7 @@ if (port === undefined) {
 }
 
 const currentHosts = new Map<string, UserState>; // uuid: UserState
+const hostUUIDs = new Map<string, string>; // username: uuid
 const currentClients = new Map<string, UserState>; // uuid: UserState
 
 function getConnectedAccs(username: string) { // returns an array of userStates connected to some user
@@ -76,13 +77,13 @@ function hostBroadcast(data: WSHost, username: string) {
     }
 }
 
-function getUUID(map: Map<string, UserState>, username: string) {
-    for (let [key, value] of map.entries()) {
-        if (value.username === username)
-            return key;
-    }
-    return undefined;
-}
+// function getUUID(map: Map<string, UserState>, username: string) {
+//     for (let [key, value] of map.entries()) {
+//         if (value.username === username)
+//             return key;
+//     }
+//     return undefined;
+// }
 
 Bun.serve({
     fetch(req, server) {
@@ -108,7 +109,8 @@ Bun.serve({
                             let username = info.payload.username;
                             key.update(info.payload.password);
                             let password = key.digest()
-                            let hostActive = getUUID(currentHosts, info.payload.username);
+                            // let hostActive = getUUID(currentHosts, info.payload.username);
+                            let hostActive = hostUUIDs.get(info.payload.username);
                             let corPasswd = (await client.query('SELECT password FROM hosts WHERE username = $1', [username])).rows[0]
                             if (corPasswd?.password.toString() === password.toString()) {
                                 if (hostActive !== undefined) { // user has logged in
@@ -153,7 +155,8 @@ Bun.serve({
                         case "data": {
                             if (currentClients.get(ws.data.uuid)) { // user is logged in
                                 // console.log(info);
-                                let hostActive = getUUID(currentHosts, currentClients.get(ws.data.uuid)?.username!);
+                                // let hostActive = getUUID(currentHosts, currentClients.get(ws.data.uuid)?.username!);
+                                let hostActive = hostUUIDs.get(currentClients.get(ws.data.uuid)?.username!);
                                 currentHosts.get(hostActive!)?.ws.send(JSON.stringify(info));
                             }
                         }
@@ -201,6 +204,7 @@ Bun.serve({
                             console.log(password);
                             if (corPasswd?.password.toString() === password.toString()) {
                                 currentHosts.set(ws.data.uuid, { username: info.payload.username, ws: ws } as UserState);
+                                hostUUIDs.set(info.payload.username, ws.data.uuid);
                                 ws.send(JSON.stringify({
                                     action: "result",
                                     payload: {
@@ -249,6 +253,7 @@ Bun.serve({
 
             if (currentHosts.get(ws.data.uuid)) {
                 currentHosts.delete(ws.data.uuid);
+                hostUUIDs.delete(currentHosts.get(ws.data.uuid)?.username!);
             } else if (currentClients.get(ws.data.uuid)) {
                 currentClients.delete(ws.data.uuid);
             }
