@@ -45,6 +45,7 @@ term.onData(data => {
     socket.send(JSON.stringify(input))
     // term.write(data);
     fitAddon.fit();
+    console.log("resize!");
 });
 term.onResize(data => {
     let input = {"action": "client", "payload": {"action": "resize", "payload": {"x": data.cols, "y": data.rows}}};
